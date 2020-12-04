@@ -11,6 +11,7 @@ class StockLookup::CLI
         puts "2. Exit"
         input = gets.chomp
         puts "\n--------------------------------"
+        
         if input == '1'
             stock_lookup_menu
         elsif input == '2' || input.downcase.include?('ex')
@@ -30,8 +31,9 @@ class StockLookup::CLI
 
     def stock_lookup(search_query)
         stock = StockLookup::API.search(search_query)
-        #If StockLookup::API.search yields a result =>
-        if stock != nil
+        
+        #If StockLookup::API.search yields a result =>   
+        if stock != nil      
             get_stock_quote_and_rating(stock.symbol)
         #In case user decides they want to exit instead of using a stock symbol
         elsif search_query.downcase.include?('exit')
@@ -57,17 +59,28 @@ class StockLookup::CLI
         
         puts "\n--------------------------------"
         puts "\n#{stock.name} (#{stock.symbol})"
-        puts "\nQuote".white
-        puts "Current Price: #{quote["price"].round(2)}"
-        puts "High: #{quote["dayHigh"].round(2)}"
-        puts "Low: #{quote["dayLow"].round(2)}"
-        puts "52wk High: #{quote["yearHigh"].round(2)}"
-        puts "52wk Low: #{quote["yearLow"].round(2)}"
-        puts "Previous Close: #{quote["previousClose"].round(2)}"
-        puts "Open: #{quote["open"].round(2)}"
-        #.send(stock.rating_color.to_sym) is so that awesome_print will change the color of output
-        puts "\nRating: #{rating["ratingRecommendation"]}".send(stock.rating_color.to_sym)
+        
+        if quote 
+            puts "\nQuote".white
+            puts "Current Price: #{quote["price"].round(2)}"
+            puts "High: #{quote["dayHigh"].round(2)}"
+            puts "Low: #{quote["dayLow"].round(2)}"
+            puts "52wk High: #{quote["yearHigh"].round(2)}"
+            puts "52wk Low: #{quote["yearLow"].round(2)}"
+            puts "Previous Close: #{quote["previousClose"].round(2)}"
+            puts "Open: #{quote["open"].round(2)}"
+        else 
+            puts "\nNo Quote Data Available".redish
+        end 
+        
+        if rating 
+            #.send(stock.rating_color.to_sym) is so that awesome_print will change the color of output
+            puts "\nRating: #{rating["ratingRecommendation"]}".send(stock.rating_color.to_sym)     
+        else 
+            puts "\nNo Rating Data Available".redish
+        end 
         puts "\n--------------------------------"
+
         main_menu
     end
 
