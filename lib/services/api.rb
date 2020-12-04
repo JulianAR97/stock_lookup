@@ -10,24 +10,24 @@ class StockLookup::API
         if response[0] != nil
             symbol = response[0]["symbol"]
             name = response[0]["name"]
-            stock = Stock.find_by_sym(symbol)
-            stock.nil? ? Stock.new(name: name, symbol: symbol) : stock
+            stock = StockLookup::Stock.find_by_sym(symbol)
+            stock.nil? ? StockLookup::Stock.new(name: name, symbol: symbol) : stock
         else 
             nil
         end
     end 
 
-    #Uses the stock symbol that is retreived in Stocks::API.search to get stock quote information
+    #Uses the stock symbol that is retreived in StockLookup::API.search to get stock quote information
     def self.quote(sym)
-        stock = Stock.find_by_sym(sym)
+        stock = StockLookup::Stock.find_by_sym(sym)
         url = BASEURL + "quote/#{sym}?apikey=#{APIKEY}"
         response = HTTParty.get(url)
         stock.quote_data = response[0]
     end
     
-    #Uses the stock symbol that is retreived in Stocks::API.search to get stock rating information
+    #Uses the stock symbol that is retreived in StockLookup::API.search to get stock rating information
     def self.rating(sym)
-        stock = Stock.find_by_sym(sym)
+        stock = StockLookup::Stock.find_by_sym(sym)
         url = BASEURL + "rating/#{sym}?apikey=#{APIKEY}"
         response = HTTParty.get(url)
         stock.rating = response[0]

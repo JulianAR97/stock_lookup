@@ -51,7 +51,7 @@ class StockLookup::CLI
 
     def stock_information(sym)
         
-        stock = Stock.find_by_sym(sym)
+        stock = StockLookup::Stock.find_by_sym(sym)
         quote = stock.quote_data
         rating = stock.rating
         

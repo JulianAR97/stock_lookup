@@ -1,4 +1,4 @@
-class Stock  
+class StockLookup::Stock 
     attr_accessor :symbol, :name, :quote_data, :rating, :rating_color
     @@all = []
 
